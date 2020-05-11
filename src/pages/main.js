@@ -1,5 +1,5 @@
 import React, { useEffect, useState }  from 'react';
-import { View, Text, FlatList, SafeAreaView, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, StyleSheet, Image, Linking } from 'react-native';
 import axios from 'axios';
 
 export default function Main() {
@@ -31,12 +31,15 @@ export default function Main() {
                       source={{
                         uri: 'https://reactnative.dev/img/tiny_logo.png',
                       }}
+                      onPress={() => alert('foi')}
                     />
                   </View>
-                  <View style={styles.subShare}>
-                    <Text style={styles.text}>{item.immobiles_address} - {item.immobiles_district}</Text> 
-                    <Text>R$: {item.immobiles_rental_price} - Código: {item.immobiles_code}</Text>
-                    <Text>{item.immobiles_property_title}</Text>
+                  <View style={styles.subShare} >
+                    <Text style={styles.text} onPress={() => alert('foi')}>
+                      {item.immobiles_address} - {item.immobiles_district}
+                    </Text> 
+                    <Text onPress={() => alert('foi')}>R$: {item.immobiles_rental_price} - Código: {item.immobiles_code}</Text>
+                    <Text onPress={() => alert('foi')}>{item.immobiles_property_title}</Text>
                   </View>
                 </View>
               </View>
