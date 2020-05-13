@@ -1,10 +1,11 @@
 import React, { useEffect, useState }  from 'react';
 import { View, Text, FlatList, SafeAreaView, StyleSheet, Image, Linking } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Main() {
     const [data, setData] = useState([]);
-
+    const navigation = useNavigation();
     console.log('getImmobile');
   
     useEffect(() => {
@@ -29,13 +30,13 @@ export default function Main() {
                     <Image
                       style={styles.tinyLogo}
                       source={{
-                        uri: 'https://reactnative.dev/img/tiny_logo.png',
+                        uri: 'http://lh3.googleusercontent.com/tRWfgggnB44doWaAP1vUGurajvnzI-W9BZMsRIPYF7we8nQ9EjJRfwgCaBQGRlT65_Gv48c2LuOqEtyodxYD_MPMV38RV9cq=w1024-h768',
                       }}
                       onPress={() => alert('foi')}
                     />
                   </View>
                   <View style={styles.subShare} >
-                    <Text style={styles.text} onPress={() => alert('foi')}>
+                    <Text style={styles.text} onPress={() => navigation.navigate('Immobile' , { itemId: item.immobiles_code } )}>
                       {item.immobiles_address} - {item.immobiles_district}
                     </Text> 
                     <Text onPress={() => alert('foi')}>R$: {item.immobiles_rental_price} - Código: {item.immobiles_code}</Text>
@@ -70,9 +71,9 @@ const styles = StyleSheet.create({
     //marginTop: 12
   },
   subText: {
-    //width: '10%',
+    width: 50,
     // color: '#666666',
-     borderWidth: 1,
+    // borderWidth: 1,
     // borderColor: "#bfc9d8",
     // borderRadius: 6,
     marginRight: 10,

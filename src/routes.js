@@ -13,7 +13,7 @@ function HomeScreen({ navigation }) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Button
-          onPress={() => navigation.navigate('Immobile')}
+          onPress={() => navigation.navigate('Immobile' , { itemId: 'CA0005'}  )}
           title="Go to notifications"
         />
       </View>
