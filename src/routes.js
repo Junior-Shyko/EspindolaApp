@@ -4,7 +4,7 @@ import { View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import Home from './pages/Home';
 import Main from './pages/main';
 import Immobile from './pages/immobile';
 
@@ -33,11 +33,12 @@ const Drawer = createDrawerNavigator();
 
 function App() {
     return (
+       <View>
         <NavigationContainer>
         <Drawer.Navigator initialRouteName="Home">
             <Drawer.Screen 
                 name="Home" 
-                component={Main} 
+                component={Home} 
                 options={{
                     headerShown: true,
                     headerTintColor: '#FFF',
@@ -57,6 +58,8 @@ function App() {
             <Drawer.Screen name="Sobre" component={Immobile} />
         </Drawer.Navigator>
         </NavigationContainer>
+        <Home />
+       </View>
     );
 }
 

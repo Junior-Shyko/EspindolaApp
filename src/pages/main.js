@@ -3,9 +3,9 @@ import { View, Text, FlatList, SafeAreaView, StyleSheet, Image, Linking } from '
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Main() {
+export default function Main({ navigation }) {
     const [data, setData] = useState([]);
-    const navigation = useNavigation();
+    
     console.log('getImmobile');
   
     useEffect(() => {
@@ -36,7 +36,12 @@ export default function Main() {
                     />
                   </View>
                   <View style={styles.subShare} >
-                    <Text style={styles.text} onPress={() => navigation.navigate('Immobile' , { itemId: item.immobiles_code } )}>
+                  <Text style={styles.text} onPress={() => 
+                    //console.log(item.immobiles_code);
+                    navigation.navigate('Immobile' , { 
+                      itemId: item.immobiles_code 
+                    } )
+                  }>
                       {item.immobiles_address} - {item.immobiles_district}
                     </Text> 
                     <Text onPress={() => alert('foi')}>R$: {item.immobiles_rental_price} - Código: {item.immobiles_code}</Text>
