@@ -1,17 +1,15 @@
 import React, { useEffect, useState }  from 'react';
-import { View, Text, FlatList, SafeAreaView, StyleSheet, Image, Linking } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, StyleSheet, Image, Badge, Linking } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Main({ navigation }) {
     const [data, setData] = useState([]);
     
-    console.log('getImmobile');
-  
     useEffect(() => {
-      axios.get('https://espindolaimobiliaria.com.br/api/immobile-all')
+      axios.get('http://192.168.11.5:3000/api/featuredPhotoImmobile')
       .then((response) => { 
-        console.log(response.data)
+        //console.log(response.data)
         setData(response.data)
        })
       .catch((error) => console.error(error));
@@ -23,28 +21,31 @@ export default function Main({ navigation }) {
           <FlatList
             data={data}
             keyExtractor={item => item.immobiles_id}
-            renderItem={({ item }) => (             
+            renderItem={({ item }) => ( 
                 <View style={styles.item}>
+                  <Text style={styles.textType}>
+                    {item.immobiles_type_immobiles} - {item.immobiles_district} - {item.immobiles_city}
+                  </Text>
                 <View style={styles.sub}>
                   <View style={styles.subText}>
                     <Image
                       style={styles.tinyLogo}
                       source={{
-                        uri: 'http://lh3.googleusercontent.com/tRWfgggnB44doWaAP1vUGurajvnzI-W9BZMsRIPYF7we8nQ9EjJRfwgCaBQGRlT65_Gv48c2LuOqEtyodxYD_MPMV38RV9cq=w1024-h768',
+                        uri: item.photo_immobiles_url,
                       }}
                       onPress={() => alert('foi')}
                     />
                   </View>
                   <View style={styles.subShare} >
-                  <Text style={styles.text} onPress={() => 
-                    //console.log(item.immobiles_code);
-                    navigation.navigate('Immobile' , { 
-                      itemId: item.immobiles_code 
-                    } )
-                  }>
-                      {item.immobiles_address} - {item.immobiles_district}
+                    <Text style={styles.text} onPress={() => 
+                      //console.log(item.immobiles_code);
+                      navigation.navigate('Immobile' , { 
+                        itemId: item.immobiles_code 
+                      } )
+                    }>{item.immobiles_code}
                     </Text> 
-                    <Text onPress={() => alert('foi')}>R$: {item.immobiles_rental_price} - Código: {item.immobiles_code}</Text>
+                    
+                    <Text onPress={() => alert('foi')}> - Código: {item.immobiles_code}</Text>
                     <Text onPress={() => alert('foi')}>{item.immobiles_property_title}</Text>
                   </View>
                 </View>
@@ -61,13 +62,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#E5E7E9",
     flexGrow: 1,
     marginBottom: 4,
-    padding: 15,
-    height: 120,
-    marginLeft: 0
+    height: 150
   },
   text: {
     color: "#333333",
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginTop: 8,
+    marginLeft: 5
   },
   sub: {
     flexDirection: 'row',
@@ -76,18 +77,25 @@ const styles = StyleSheet.create({
     //marginTop: 12
   },
   subText: {
-    width: 50,
+    width: 80,
     // color: '#666666',
     // borderWidth: 1,
     // borderColor: "#bfc9d8",
     // borderRadius: 6,
-    marginRight: 10,
-    marginLeft: 0
+    // marginRight: 0,
+    // marginLeft: 0
+  },
+  textType: {
+    color: "#333333",
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginLeft: 10
   },
   subShare: {
-    width: 300
+    width: 300,
+    backgroundColor: "#ffffff"
     // marginRight: 20,
-    // marginTop: 12,
+    //marginTop: 8,
     // marginBottom: 12,
     // fontFamily: 'Roboto',
     // fontStyle: 'normal',
@@ -98,7 +106,9 @@ const styles = StyleSheet.create({
     // color: '#EEEEEE'
   },
   tinyLogo: {
-    width: 50,
-    height: 50,
+    marginTop: 2,
+    width: 110,
+    height: 110,
+    backgroundColor: "#ffffff"
   },
 });
