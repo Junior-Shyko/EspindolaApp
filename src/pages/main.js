@@ -1,5 +1,6 @@
 import React, { useEffect, useState }  from 'react';
-import { View, Text, FlatList, SafeAreaView, StyleSheet, Image, Badge, Linking } from 'react-native';
+import { View, Text, FlatList, SafeAreaView, StyleSheet, Image} from 'react-native';
+import { Button } from 'react-native-paper';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
@@ -37,16 +38,29 @@ export default function Main({ navigation }) {
                     />
                   </View>
                   <View style={styles.subShare} >
-                    <Text style={styles.text} onPress={() => 
-                      //console.log(item.immobiles_code);
-                      navigation.navigate('Immobile' , { 
-                        itemId: item.immobiles_code 
-                      } )
-                    }>{item.immobiles_code}
-                    </Text> 
                     
-                    <Text onPress={() => alert('foi')}> - Código: {item.immobiles_code}</Text>
-                    <Text onPress={() => alert('foi')}>{item.immobiles_property_title}</Text>
+                    <Text onPress={() => alert('foi')}
+                      style={{
+                        backgroundColor: '#606fc7',
+                        borderRadius: 5,
+                        color: '#fff',
+                        marginLeft: 10,
+                        fontSize: 15,
+                        marginTop: 5,
+                        minWidth: 20,
+                        padding: 3,
+                        position: 'absolute',
+                        textAlign: 'center',
+                        fontWeight: 'bold'
+                      }}
+                    > R$: {item.immobiles_rental_price}</Text>
+                    <View  style={{
+                      flexDirection: 'row'
+                    }}>
+                      <Text style={styles.textTitle}>
+                        {item.immobiles_property_title}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -68,7 +82,7 @@ const styles = StyleSheet.create({
     color: "#333333",
     fontWeight: 'bold',
     marginTop: 8,
-    marginLeft: 5
+    marginLeft: 10
   },
   sub: {
     flexDirection: 'row',
@@ -89,6 +103,11 @@ const styles = StyleSheet.create({
     color: "#333333",
     fontWeight: 'bold',
     marginTop: 20,
+    marginLeft: 5
+  },
+  textTitle: {
+    color: "#333333",
+    marginTop: 35,
     marginLeft: 10
   },
   subShare: {
