@@ -8,12 +8,12 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 var { height } = Dimensions.get('window');
 var { width } = Dimensions.get('window');
-console.log(Dimensions.get('window').width);
+// console.log(Dimensions.get('window').width);
 var box_count = 3;
 var box_height = height / box_count;
 var box_width = width / 2;
-console.log({box_height});
-console.log({box_width});
+// console.log({box_height});
+// console.log({box_width});
 
 const Home = ({ navigation }) =>{
     <View style={styles.container}>
@@ -59,7 +59,7 @@ const Home = ({ navigation }) =>{
         <View style={[styles.box, styles.box1]}>
             <Card style={[styles.box, styles.boxCard]}>
                 <Card.Content>
-                    <Title>Apartamento</Title>
+                    <Title>Casa</Title>
                 </Card.Content>
                 <Card.Cover 
                 source={{ uri: 'https://image.freepik.com/vetores-gratis/icone-do-vetor-de-casa_22350-18.jpg' }}

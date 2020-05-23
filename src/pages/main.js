@@ -2,20 +2,23 @@ import React, { useEffect, useState }  from 'react';
 import { View, Text, FlatList, SafeAreaView, StyleSheet, Image} from 'react-native';
 import { Button } from 'react-native-paper';
 import axios from 'axios';
+import Detail from './immobile/detail';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Main({ navigation }) {
     const [data, setData] = useState([]);
     
     useEffect(() => {
-      axios.get('http://192.168.11.5:3000/api/featuredPhotoImmobile')
+      axios.get('http://192.168.11.7:3000/api/featuredPhotoImmobile')
       .then((response) => { 
         //console.log(response.data)
         setData(response.data)
        })
       .catch((error) => console.error(error));
     }, []);
-    
+    const { params } = navigation.state;
+    const itemId = params ? params.itemId : null;
+    console.log(itemId);
     return (
       <View style={{ flex: 1, padding: 2 }}>
         <SafeAreaView>
@@ -34,12 +37,17 @@ export default function Main({ navigation }) {
                       source={{
                         uri: item.photo_immobiles_url,
                       }}
-                      onPress={() => alert('foi')}
                     />
                   </View>
                   <View style={styles.subShare} >
                     
-                    <Text onPress={() => alert('foi')}
+                    <Text onPress={() => {
+                      /* 1. Navigate to the Details route with params */
+                      //const {itemId} = navigation.route
+                      navigation.navigate('Proposal', { itemId: item.immobiles_code },
+                      );
+                      //alert('oi');
+                    }}
                       style={{
                         backgroundColor: '#606fc7',
                         borderRadius: 5,
@@ -103,7 +111,8 @@ const styles = StyleSheet.create({
     color: "#333333",
     fontWeight: 'bold',
     marginTop: 20,
-    marginLeft: 5
+    marginLeft: 5,
+    fontSize: 16
   },
   textTitle: {
     color: "#333333",

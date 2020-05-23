@@ -108,13 +108,28 @@ const ReserveKeyStackNavigator = createStackNavigator({
     }),
   },
 });
-//Fazer pŕoposta
+//Fazer proposta
 const ProposalStackNavigator = createStackNavigator({
   Proposal: {
-    screen: Imoveis,
+    screen: Detail,
+    params: { 'itemId' : 'AP0267' },
     navigationOptions: ({ navigation }) => ({
-      title: 'Fazer Proposta',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
+      title: 'Detalhes',
+      headerLeft: ()=> {
+        return (
+          <TouchableOpacity onPress={ () => navigation.navigate('Screen2') }>
+          {/*Donute Button Image */}
+          <Icon
+            name="arrow-left"
+            size={23}
+            color="#fff"
+            style={{
+              marginLeft: 10
+            }}
+          />
+        </TouchableOpacity>
+        )
+      } ,
       headerStyle: {
         backgroundColor: '#1E3B70',
       },
@@ -173,7 +188,7 @@ const DrawerNavigator = createDrawerNavigator({
   Proposal: {
     screen: ProposalStackNavigator,
     navigationOptions: {
-      drawerLabel: 'Reserva de chaves',
+      drawerLabel: 'Fazer proposta',
     },
   },
   About: {
