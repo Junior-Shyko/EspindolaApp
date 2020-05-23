@@ -112,7 +112,7 @@ const ReserveKeyStackNavigator = createStackNavigator({
 const ProposalStackNavigator = createStackNavigator({
   Proposal: {
     screen: Detail,
-    params: { 'itemId' : 'AP0267' },
+    params: { 'itemId' : 'CA0129' },
     navigationOptions: ({ navigation }) => ({
       title: 'Detalhes',
       headerLeft: ()=> {

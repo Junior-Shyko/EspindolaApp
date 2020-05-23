@@ -18,13 +18,13 @@ export default function Main({ navigation }) {
     }, []);
     const { params } = navigation.state;
     const itemId = params ? params.itemId : null;
-    console.log(itemId);
+    // console.log(itemId);
     return (
       <View style={{ flex: 1, padding: 2 }}>
         <SafeAreaView>
           <FlatList
             data={data}
-            keyExtractor={item => item.immobiles_id}
+            keyExtractor={item => item.immobiles_id.toString()}
             renderItem={({ item }) => ( 
                 <View style={styles.item}>
                   <Text style={styles.textType}>

@@ -1,9 +1,10 @@
 import React, { Component }  from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView, Image, Linking } from 'react-native';
 import { SliderBox } from 'react-native-image-slider-box';
 import { Paragraph, Button, Card, Title, List } from 'react-native-paper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { directive } from '@babel/types';
 
 var { height } = Dimensions.get('window');
@@ -35,7 +36,7 @@ export default class App extends Component {
   componentDidMount() {
     console.log(this.props.navigation.state.params.itemId)
     const code = this.props.navigation.state.params.itemId;
-    axios.get('https://espindolaimobiliaria.com.br/api/immobileCode/'+code)
+    axios.get('http://192.168.11.7:3000/api/immobileCode/'+code)
     .then((response) => {
       //console.log(response.data);
       var allData = response.data;
@@ -54,7 +55,7 @@ export default class App extends Component {
   retInfoImovel(indice, icon) {
     const infoImmobile = this.state.data[0];
     for (var prop in infoImmobile) {
-      // console.log("obj." + prop + " = " + infoImmobile[prop]);
+      
       // console.log(typeof(prop));
       // console.log(infoImmobile['photo_immobiles_id'])
       
@@ -76,6 +77,7 @@ export default class App extends Component {
   infoDescription(indice) {
     const infoImmobile = this.state.data[0];
     for (var prop in infoImmobile) {
+      console.log("obj." + prop + " = " + infoImmobile[prop]);
       var getIndice = '';
       var getValue = '';
       switch (indice) {
@@ -119,8 +121,41 @@ export default class App extends Component {
     }
   }
 
+  infoRent() {
+    const infoImmobile = this.state.data[0];
+    for (var prop in infoImmobile) {
+      console.log("infoRent." + prop + " = " + infoImmobile[prop]);
+      if(prop == 'immobiles_rental_price' && infoImmobile[prop] > 0){
+        return(
+          <View>
+            <Title style={styles.cardContentTitle}>Locação: {infoImmobile[prop]}</Title>
+          </View>
+        )
+      }
+      if(prop == 'immobiles_condominium_price' && infoImmobile[prop] > 0){
+        
+        return (
+          <Text style={styles.cardContentParagrafy}>Valor Cond. 800</Text>
+        )
+      }
+    }
+  }
+
+  infoAddress() {
+    const infoImmobile = this.state.data[0];
+    for (var prop in infoImmobile) {
+     
+      return (
+        <View>
+            <Text>
+            {infoImmobile['immobiles_address']} , Nº: { infoImmobile['immobiles_number']} , Comp. {infoImmobile['immobiles_complement']} , Bairro: {infoImmobile['immobiles_district']} , Cidade: {infoImmobile['immobiles_city']} , CE: {infoImmobile['immobiles_state']}
+            </Text>
+        </View>
+      )
+    }
+  }
   render() {
-    //this.retInfoImovel();
+     
     return (
       <ScrollView>
           <SliderBox
@@ -136,7 +171,7 @@ export default class App extends Component {
                 height: 15,
                 borderRadius: 15
               }}
-              //autoplay
+              // autoplay
               circleLoop
               imageLoadingColor="#3f47b5"
               parentWidth={this.state.width}
@@ -153,8 +188,8 @@ export default class App extends Component {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                <Title style={styles.cardContentTitle}>Locação: 1200</Title>
-                <Paragraph style={styles.cardContentParagrafy}>Valor Cond. 800</Paragraph>
+               {this.infoRent()}
+               
               </Card.Content>
               <Card.Content>
                 {this.infoDescription('immobiles_code')}
@@ -173,18 +208,33 @@ export default class App extends Component {
           <View style={styles.boxIndo}>
               <Card>
                 <Card.Content>
-                  <Title>Endereço do Imóvel</Title>
-                  <Paragraph style={styles.cardContentParagrafy}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Paragraph>
+                  <Title>
+                    <Icon name="map-marker" size={20} />
+                  Endereço do Imóvel</Title>
+                  {this.infoAddress()}
                 </Card.Content>
               </Card>
           </View>
           <View style={styles.boxIndo}>
               <Card>
                 <Card.Content>
-                  <Title>Endereço do Imóvel</Title>
-                  <Paragraph style={styles.cardContentParagrafy}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Paragraph>
+                  <Title>Descrição</Title>
+                  <Paragraph style={styles.cardContentParagrafy}>Casa duplex em condomínio fechado com 03 suítes sendo 01 com closet e armários no primeiro pavimento, banheiro social, cozinha com armários, área de serviço, dependência de empregada, churrasqueira, deck com chuveiro. Condomínio: 03 vagas, cerca elétrica, portaria virtual, Valor: R$675,00 Ref.: 01/2020 Localização: Av. Presidente Artur Bernardes, 2757. Localizada a pouco metros da Maestro Lisboa, Próximo ao Colégio Christus Sul e ao supermercado G.Barbosa.
+
+                  </Paragraph>
                 </Card.Content>
               </Card>
+              <Button 
+              mode="contained"
+              onPress={() => Linking.openURL('https://grautour.com/public/plugins/1705191495196031/ver-360.php?id=AP0262')}
+              color="#f5b406"
+              style={{
+                margin: 15
+              }}
+            >
+              <IconFontAwesome name="street-view" size={18} color="black" />
+              Tour Virtual
+            </Button>
           </View>
       </ScrollView>
     );
