@@ -1,188 +1,94 @@
-import React, { Component } from 'react'
-//import react in our code.
-import { View, Image, TouchableOpacity } from 'react-native';
+import * as React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './pages/immobile';
 import Imoveis from './pages/immobile/imoveis';
 import Detail from './pages/immobile/detail';
+import description from './pages/immobile/description';
 import Main from './pages/main';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import './config/statusBarConfig';
-//Import React Navigation
-import {createAppContainer} from 'react-navigation';
-import {createDrawerNavigator} from 'react-navigation-drawer';
-import {createStackNavigator} from 'react-navigation-stack';
 
-class NavigationDrawerStructure extends Component {
-  //Structure for the navigatin Drawer
-  toggleDrawer = () => {
-    //Props to open/close the drawer
-    this.props.navigationProps.toggleDrawer();
-  };
-  render() {
-    return (
-      <View style={{ flexDirection: 'row'}}>
-        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          {/*Donute Button Image */}
-          <Icon
-            name="bars"
-            size={25}
-            color="#fff"
-            style={{
-              marginLeft: 10
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
+function HomeScreen({navigation}) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('Imoveis')}
+      />
+    </View>
+  );
 }
 
-const HomeStackNavigator = createStackNavigator({
-  //All the screen from the Screen1 will be indexed here
-  First: {
-    screen: Home,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Espíndola Imobiliária',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
+function ProfileScreen({navigation}) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Profile Screen</Text>
+      <Button
+        title="BOtão do profile"
+        onPress={() => navigation.navigate('Imoveis')}
+      />
+    </View>
+  );
+}
 
-const AllImmobileStackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
-  Second: {
-    screen: Main,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Todos os Imóveis',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
-//Immóveis a venda
-const SaleImmobileStackNavigator = createStackNavigator({  
-  SaleImmobile: {
-    screen: Imoveis,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Imóveis a Venda',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
-//Immóveis para locação
-const RentImmobileStackNavigator = createStackNavigator({
-  RentImmobile: {
-    screen: Imoveis,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Imóveis a Venda',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
-//Reserva de Chaves
-const ReserveKeyStackNavigator = createStackNavigator({
-  ReserveKey: {
-    screen: Imoveis,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Reserva de Chave',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
-//Fazer pŕoposta
-const ProposalStackNavigator = createStackNavigator({
-  Proposal: {
-    screen: Imoveis,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Fazer Proposta',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
+const FeedStack = createStackNavigator();
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const AboutStackNavigator = createStackNavigator({
-  //All the screen from the Screen3 will be indexed here
-  About: {
-    screen: Imoveis,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Sobre a Espíndola',
-      headerLeft: ()=> <NavigationDrawerStructure navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#1E3B70',
-      },
-      headerTintColor: '#fff',
-    }),
-  },
-});
+function HomeTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      activeColor="#f0edf6"
+      inactiveColor="#3e2465"
+      barStyle={{ backgroundColor: '#694fad' }}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          const icons = {
+            Home: 'home',
+            Proposta: 'playlist-edit',
+            Pesquisar: 'map-search-outline',
+          };
+          return (
+            <Icon
+              name={icons[route.name]}
+              color={color}
+              size={20}
+            />
+          );
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Pesquisar" component={Main} />
+      <Tab.Screen name="Proposta" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
 
-const DrawerNavigator = createDrawerNavigator({
-  //Drawer Optons and indexing
-  Screen1: {
-    screen: HomeStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Home',
-    },
-  },
-  Screen2: {
-    screen: AllImmobileStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Todos os imóveis',
-    },
-  },
-  SaleImmobile: {
-    screen: SaleImmobileStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Imóveis a Venda',
-    },
-  },
-  RentImmobile: {
-    screen: RentImmobileStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Imóveis para Locação',
-    },
-  },
-  ReserveKey: {
-    screen: ReserveKeyStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Reserva de chaves',
-    },
-  },
-  Proposal: {
-    screen: ProposalStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Reserva de chaves',
-    },
-  },
-  About: {
-    //Title
-    screen: AboutStackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Sobre a Espíndola',
-    },
-  },
-});
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{ 
+          headerStyle: { 
+            backgroundColor: '#1E3B70' 
+          },
+          headerTintColor: '#fff',
+        }}
+      >
+        <Stack.Screen
+          name="Espíndola Imobiliária"
+          component={HomeTabs} 
+        />
+        <Stack.Screen name="Imoveis" component={Main} />
+        <Stack.Screen name="Detalhes" component={Detail} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
-export default createAppContainer(DrawerNavigator);
+export default App;
