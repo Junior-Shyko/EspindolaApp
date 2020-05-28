@@ -27,7 +27,7 @@ const Home = ({ navigation }) => (
                     mode="contained"
                     color="#32408f"
                     compact={false}
-                    onPress={() => navigation.navigate('Screen2') }
+                    onPress={() => navigation.navigate('Imoveis') }
                     >Ver todos
                 </Button>
                 <Card.Actions>

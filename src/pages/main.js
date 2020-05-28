@@ -16,8 +16,8 @@ export default function Main({ navigation }) {
        })
       .catch((error) => console.error(error));
     }, []);
-    const { params } = navigation.state;
-    const itemId = params ? params.itemId : null;
+    // const { params } = navigation.state;
+    // const itemId = params ? params.itemId : null;
     // console.log(itemId);
     return (
       <View style={{ flex: 1, padding: 2 }}>
@@ -44,7 +44,7 @@ export default function Main({ navigation }) {
                     <Text onPress={() => {
                       /* 1. Navigate to the Details route with params */
                       //const {itemId} = navigation.route
-                      navigation.navigate('Proposal', { itemId: item.immobiles_code },
+                      navigation.navigate('Detalhes', { itemId: item.immobiles_code },
                       );
                       //alert('oi');
                     }}

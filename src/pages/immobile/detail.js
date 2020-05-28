@@ -23,19 +23,11 @@ export default class App extends Component {
       images: [
          require('../../assets/images/ap0268capa.jpg'),// Local image
       ],
-      dataImo: [],
-      data: [],
-      ps: '',
-      logo: {
-        uri: 'https://reactnative.dev/img/tiny_logo.png',
-        width: 64,
-        height: 64
-      }
+      data: []
     };
   }
   componentDidMount() {
-    console.log(this.props.navigation.state.params.itemId)
-    const code = this.props.navigation.state.params.itemId;
+    const code = this.props.route.params.itemId;
     axios.get('http://192.168.11.7:3000/api/immobileCode/'+code)
     .then((response) => {
       //console.log(response.data);
@@ -46,19 +38,30 @@ export default class App extends Component {
           //console.log(img);          
       });
       this.setState({ images: img });
-      this.setState({ data: response.data });
+      this.setState({ data: response.data[0] });
       //console.log(this.state.data);
     })
     .catch((error) => console.error(error));
   }
+  
+  formatReal( int )
+  {
+    if(int == undefined ) {
+      return '0,00'
+    }
+    var tmp = int+'00'+'';
+    tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
+    if( tmp.length > 6 )
+            tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    if(tmp == '') {
+      return 0
+    }
+    return tmp;
+  }
   // other component code ...
   retInfoImovel(indice, icon) {
-    const infoImmobile = this.state.data[0];
-    for (var prop in infoImmobile) {
-      
-      // console.log(typeof(prop));
-      // console.log(infoImmobile['photo_immobiles_id'])
-      
+    const infoImmobile = this.state.data;
+    for (var prop in infoImmobile) { 
       return (
         <View style={{width: box_width, height: 70, backgroundColor: '#3f6fb5', alignItems: 'center', borderRightColor: "#fff", borderWidth: 1}} 
         >
@@ -75,7 +78,7 @@ export default class App extends Component {
   }
 
   infoDescription(indice) {
-    const infoImmobile = this.state.data[0];
+    const infoImmobile = this.state.data;
     for (var prop in infoImmobile) {
       console.log("obj." + prop + " = " + infoImmobile[prop]);
       var getIndice = '';
@@ -121,8 +124,8 @@ export default class App extends Component {
     }
   }
 
-  infoRent() {
-    const infoImmobile = this.state.data[0];
+  infoRent(state) {
+    const infoImmobile = this.state.data[0];    
     for (var prop in infoImmobile) {
       console.log("infoRent." + prop + " = " + infoImmobile[prop]);
       if(prop == 'immobiles_rental_price' && infoImmobile[prop] > 0){
@@ -132,8 +135,7 @@ export default class App extends Component {
           </View>
         )
       }
-      if(prop == 'immobiles_condominium_price' && infoImmobile[prop] > 0){
-        
+      if(prop == 'immobiles_condominium_price' && infoImmobile[prop] > 0){        
         return (
           <Text style={styles.cardContentParagrafy}>Valor Cond. 800</Text>
         )
@@ -142,20 +144,20 @@ export default class App extends Component {
   }
 
   infoAddress() {
-    const infoImmobile = this.state.data[0];
+    const infoImmobile = this.state.data;
     for (var prop in infoImmobile) {
-     
       return (
         <View>
-            <Text>
+            <Text style={styles.address}>
             {infoImmobile['immobiles_address']} , Nº: { infoImmobile['immobiles_number']} , Comp. {infoImmobile['immobiles_complement']} , Bairro: {infoImmobile['immobiles_district']} , Cidade: {infoImmobile['immobiles_city']} , CE: {infoImmobile['immobiles_state']}
             </Text>
         </View>
       )
     }
-  }
+  };
+
   render() {
-     
+    console.log(this.state.data);
     return (
       <ScrollView>
           <SliderBox
@@ -177,10 +179,12 @@ export default class App extends Component {
               parentWidth={this.state.width}
           />
           <View style={styles.box2}>
+          
             {this.retInfoImovel('immobiles_qtd_toilet', 'toilet')}
             {this.retInfoImovel('immobiles_qtd_dormitory', 'bed-empty')}
             {this.retInfoImovel('immobiles_total_area', 'diameter-outline')}
             {this.retInfoImovel('immobiles_qtd_uncovered_jobs', 'car-back')}
+         
           </View>
           <View style={styles.boxIndo}>
             <Card>
@@ -188,8 +192,28 @@ export default class App extends Component {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-               {this.infoRent()}
-               
+              {
+                this.state.data.immobiles_rental_price > 0 ?
+                <View>
+                  <Title style={styles.cardContentTitle}>
+                  Locação: {this.formatReal(this.state.data.immobiles_rental_price)}</Title>
+                </View>
+                : 
+                <View>
+                  <Title style={styles.cardContentTitle}>
+                  Venda: {this.formatReal(this.state.data.immobiles_selling_price)}</Title>
+                </View>
+              }
+              {
+                this.state.data.immobiles_condominium_price > 0 ?
+                <View>
+                  <Title style={styles.cardContentParagrafy}>
+                  Valor Cond. {this.formatReal(this.state.data.immobiles_condominium_price)}
+                  </Title>
+                </View>
+                : 
+                false
+              }
               </Card.Content>
               <Card.Content>
                 {this.infoDescription('immobiles_code')}
@@ -219,8 +243,8 @@ export default class App extends Component {
               <Card>
                 <Card.Content>
                   <Title>Descrição</Title>
-                  <Paragraph style={styles.cardContentParagrafy}>Casa duplex em condomínio fechado com 03 suítes sendo 01 com closet e armários no primeiro pavimento, banheiro social, cozinha com armários, área de serviço, dependência de empregada, churrasqueira, deck com chuveiro. Condomínio: 03 vagas, cerca elétrica, portaria virtual, Valor: R$675,00 Ref.: 01/2020 Localização: Av. Presidente Artur Bernardes, 2757. Localizada a pouco metros da Maestro Lisboa, Próximo ao Colégio Christus Sul e ao supermercado G.Barbosa.
-
+                  <Paragraph style={styles.cardContentParagrafy}>
+                    {this.state.data.immobiles_ps}
                   </Paragraph>
                 </Card.Content>
               </Card>
@@ -271,8 +295,7 @@ const styles = StyleSheet.create({
   box3: {
     backgroundColor: '#e3aa1a'
   },
-  caracContainer:{
-     
+  caracContainer:{     
       backgroundColor: '#ffffff',
       alignItems: 'center'      
   },
@@ -291,7 +314,8 @@ const styles = StyleSheet.create({
     fontSize: 25
   },
   cardContentParagrafy: {
-    color: '#6e7286'
+    color: '#6e7286',
+    fontSize: 15,
   },
   cardContentWiewLeft: {
     width: box_width,
@@ -312,5 +336,9 @@ const styles = StyleSheet.create({
   textContentViewRight: {
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  address: {
+    fontSize: 20,
+    color: '#6e7286',
   }
 });
