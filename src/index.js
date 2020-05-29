@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './pages/immobile';
 import Imoveis from './pages/immobile/imoveis';
 import Detail from './pages/immobile/detail';
-import description from './pages/immobile/description';
+import Search from './pages/immobile/search.js';
 import Main from './pages/main';
 
 function HomeScreen({navigation}) {
@@ -63,7 +63,7 @@ function HomeTabs() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Pesquisar" component={Main} />
+      <Tab.Screen name="Pesquisar" component={Search} />
       <Tab.Screen name="Proposta" component={ProfileScreen} />
     </Tab.Navigator>
   );
